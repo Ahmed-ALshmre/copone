@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "618888525221",
+    "project_id": "copone-58cf5",
+    "storage_bucket": "copone-58cf5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618888525221:android:bd3348c20a28c5af35644c",
+        "android_client_info": {
+          "package_name": "com.admin_copon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618888525221-lpog0k8ot9e2nf5u89h9kk4a5hli67rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwILvLfnBmTcM_2CLIDeQINv1UxU3stn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "618888525221-lpog0k8ot9e2nf5u89h9kk4a5hli67rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618888525221:android:7c0f8829915b8e4035644c",
+        "android_client_info": {
+          "package_name": "com.example.cobonapp_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618888525221-lpog0k8ot9e2nf5u89h9kk4a5hli67rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwILvLfnBmTcM_2CLIDeQINv1UxU3stn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "618888525221-lpog0k8ot9e2nf5u89h9kk4a5hli67rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

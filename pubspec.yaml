@@ -1,0 +1,35 @@
+name: admin_copon
+description: A new Flutter application.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.0
+  cloud_firestore:
+  fluttertoast: ^3.1.3
+  webview_flutter: ^1.0.7
+  image_picker:
+  intl:
+  firebase_storage: ^3.1.1
+  path_provider: ^0.5.0+1
+  shared_preferences:
+  nepali_date_picker: ^4.2.0
+  multi_image_picker: ^4.6.1
+  f_datetimerangepicker: ^0.1.4
+  multi_select_flutter: ^3.1.6
+  provider: ^4.3.1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
