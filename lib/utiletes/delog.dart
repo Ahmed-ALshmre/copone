@@ -122,3 +122,43 @@ allContInFirebase(BuildContext context,List list) => showDialog(
     );
   },
 );
+
+allContInMarket(BuildContext context,List list) => showDialog(
+  context: context,
+  builder: (context) {
+    final _multipleNotifier = Provider.of<MultipleNotifier>(context);
+    return AlertDialog(
+      title: Text("الرجاء تحديد الشركة"),
+      content: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: list
+                .map((e) => CheckboxListTile(
+              title: Text(e),
+              onChanged: (value) {
+                value
+                    ? _multipleNotifier.addItemMarket(e)
+                    : _multipleNotifier.removeItemMarket(e);
+                print(Provider.of<MultipleNotifier>(context,
+                    listen: false)
+                    .selectedItemsMarket);
+              },
+              value: _multipleNotifier.isHaveItemMarket(e),
+            ))
+                .toList(),
+          ),
+        ),
+      ),
+      actions: [
+        FlatButton(
+          child: Text("Yes"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  },
+);

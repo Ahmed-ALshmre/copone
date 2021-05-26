@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:admin_copon/delog/toolsdelog.dart';
 import 'package:admin_copon/utiletes/delog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:f_datetimerangepicker/f_datetimerangepicker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,76 +24,33 @@ class UploadPage extends StatefulWidget {
 
 class _UploadPageState extends State<UploadPage>
     with AutomaticKeepAliveClientMixin<UploadPage> {
+  TextEditingController teamController = TextEditingController();
   TextEditingController _titleArTextEditingController = TextEditingController();
   TextEditingController _codeTextEditingController = TextEditingController();
   TextEditingController _titleEnlTextEditingController =
       TextEditingController();
-
   String productId = DateTime.now().microsecondsSinceEpoch.toString();
   File file;
   List<String> listEnAr;
+  String tiemNew;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    teamController.text = formattedDate;
   }
-
-  Widget getListCatogre() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('list').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return new Center(
-              child: CircularProgressIndicator(),
-            );
-          default:
-            return ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  ModelListItem modelListItem = ModelListItem.fromJson(
-                      snapshot.data.documents[index].data);
-                  print(modelListItem.listEr);
-                  Provider.of<AppData>(context, listen: false)
-                      .conterIndex(modelListItem.listCon);
-                  Provider.of<AppData>(context, listen: false)
-                      .catoFirebase(modelListItem.listEr, modelListItem.listAr);
-                  print(modelListItem.listAr);
-                  print(modelListItem.listCon);
-                  return Container(
-                    child: Text(modelListItem.listEr[index]),
-                  );
-                });
-        }
-      },
-    );
-  }
-
-  final List<String> countries = [
-    'United Kingdom',
-    'USA',
-    'France',
-    'Australia',
-    'New Zealand',
-    'Germany',
-    'Vietnam',
-    'India'
-  ];
 
   String endE;
   String startS;
-  TextEditingController teamController = TextEditingController();
   bool upLoding = false;
   bool get wantKeepAlive => true;
+  TextEditingController urlController = TextEditingController();
   String formattedDate;
   @override
   Widget build(BuildContext context) {
     var now = new DateTime.now();
     var formatter = new DateFormat("dd-MM-yyyy h:mma");
     formattedDate = formatter.format(now);
-    teamController.text = formattedDate;
-    print("1");
     return file == null ? displayAAdmin() : displayUplaodHome();
   }
 
@@ -114,20 +70,6 @@ class _UploadPageState extends State<UploadPage>
                 tileMode: TileMode.clamp),
           ),
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.border_color,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-        actions: [
-          FlatButton(
-              child: Text(
-            'LogOut',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ))
-        ],
       ),
       body: getAdninScreenBodey(),
     );
@@ -145,6 +87,8 @@ class _UploadPageState extends State<UploadPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(height: 10, child: getListCatogre()),
+            Container(height: 10, width: 10, child: getListCat()),
+            Container(height: 10, width: 10, child: getListCatMarket()),
             Icon(
               Icons.shopping_bag,
               size: 200,
@@ -169,7 +113,6 @@ class _UploadPageState extends State<UploadPage>
     );
   }
 
-  List<ItemClass> _selectedAnimals3 = [];
   tickImage(myContext) {
     showDialog(
         context: myContext,
@@ -263,7 +206,7 @@ class _UploadPageState extends State<UploadPage>
         ),
         actions: [
           FlatButton(
-            onPressed: upLoding ? null : () => upLodingImageToItim(),
+            onPressed: upLoding ? null : () => uplodeListNameCont(),
             child: Text(
               'Add',
               style: TextStyle(
@@ -301,7 +244,7 @@ class _UploadPageState extends State<UploadPage>
             padding: const EdgeInsets.all(8.0),
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 20,left: 10),
+              padding: EdgeInsets.only(top: 20, left: 10),
               height: 55,
               width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
@@ -310,10 +253,21 @@ class _UploadPageState extends State<UploadPage>
               ),
               child: TextField(
                 controller: teamController,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'ارجاء كتابة التاريخ النتهاء كما موضح لك'
-              ),
+                decoration: InputDecoration(
+                    prefix: Padding(
+                      padding: EdgeInsets.only(top: 15.0),
+                      child: InkWell(
+                        child: Icon(Icons.access_time),
+                        onTap: () {
+                          print("12");
+                          setState(() {
+                            teamController.text = formattedDate;
+                          });
+                        },
+                      ),
+                    ),
+                    border: InputBorder.none,
+                    hintText: 'ارجاء كتابة التاريخ النتهاء كما موضح لك'),
               ),
             ),
           ),
@@ -341,7 +295,28 @@ class _UploadPageState extends State<UploadPage>
                   )),
             ),
           ),
-          Divider(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                allContInMarket(context,
+                    Provider.of<AppData>(context, listen: false).market);
+              },
+              child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(),
+                  ),
+                  child: Text(
+                    "تحديد العلامة التجارية",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  )),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
@@ -424,6 +399,26 @@ class _UploadPageState extends State<UploadPage>
                 border: Border.all(),
               ),
               child: TextField(
+                controller: urlController,
+                scrollPadding: EdgeInsets.all(3),
+                decoration:
+                    InputDecoration(border: InputBorder.none, hintText: "url"),
+              ),
+            ),
+          ),
+          Divider(),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              height: 50,
+              width: MediaQuery.of(context).size.width * 0.6,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(),
+              ),
+              child: TextField(
                 controller: _titleArTextEditingController,
                 textAlign: TextAlign.end,
                 scrollPadding: EdgeInsets.all(3),
@@ -457,24 +452,22 @@ class _UploadPageState extends State<UploadPage>
       ),
     );
   }
-
   clearFormInfo() {
     setState(() {
       file = null;
       _titleArTextEditingController.clear();
+      // urlController.clear();
       _codeTextEditingController.clear();
       _titleEnlTextEditingController.clear();
     });
   }
-
-  upLodingImageToItim() async {
+  upLodingImageToItim(String name) async {
     setState(() {
       upLoding = true;
     });
     String imageDawalosUrl = await uploadeItmimImage(file);
-    SavaItimInfo(imageDawalosUrl);
+    SavaItimInfo(imageDawalosUrl, name);
   }
-
   Future<String> uploadeItmimImage(myFile) async {
     final StorageReference storageReference =
         FirebaseStorage.instance.ref().child("Itmi");
@@ -485,7 +478,7 @@ class _UploadPageState extends State<UploadPage>
     return dionlodeUrl;
   }
 
-  SavaItimInfo(String url) {
+  SavaItimInfo(String url, nameCo) {
     final itmeRef = Firestore.instance.collection('items');
     itmeRef.document(productId).setData({
       'titleAr': _titleArTextEditingController.text.trim(),
@@ -495,22 +488,113 @@ class _UploadPageState extends State<UploadPage>
       'code': _codeTextEditingController.text.trim(),
       'publishedDate': DateTime.now(),
       'thumbnailUrl': url,
+      "bool": true,
+      "productUrl": urlController.text.trim().toString(),
       "listCatoAr":
-          Provider.of<MultipleNotifier>(context, listen: false).selectedItemsAr,
-      "listCatoEn":
-          Provider.of<MultipleNotifier>(context, listen: false).selectedItemsEn,
+          Provider.of<MultipleNotifier>(context, listen: false).selectedItemsAr.first,
+      "listCatoEn": nameCo,
       "selectCaont":
-          Provider.of<MultipleNotifier>(context, listen: false).selectedItems,
-      'endE': teamController.text.trim().toString(),
+          Provider.of<MultipleNotifier>(context, listen: false).selectedItems.first,
+      'endE': teamController.text.toString(),
       'startS': formattedDate.toString(),
+      "market": Provider.of<AppData>(context,listen: false).market.first,
     });
     setState(() {
       file = null;
       upLoding = false;
-      productId = DateTime.now().microsecondsSinceEpoch.toString();
-      _titleEnlTextEditingController.clear();
-      _titleArTextEditingController.clear();
-      _codeTextEditingController.clear();
+       productId = DateTime.now().microsecondsSinceEpoch.toString();
+      // _titleEnlTextEditingController.clear();
+      // _titleArTextEditingController.clear();
+      // _codeTextEditingController.clear();
     });
+  }
+
+  void uplodeListNameCont() {
+    for (var name in Provider.of<AppData>(context, listen: false).listAppData) {
+      upLodingImageToItim(name);
+    }
+  }
+
+  List<dynamic> domo = [];
+  List<dynamic> enListCat = [];
+  List<dynamic> arListCat = [];
+  Widget getListCatogre() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection('coon').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return new Center(
+              child: CircularProgressIndicator(),
+            );
+          default:
+            return ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  ModelListItem modelListItem = ModelListItem.fromJson(
+                      snapshot.data.documents[index].data);
+                  domo.add(snapshot.data.documents[index]['name_c']);
+                  print("ddddddddddddd$domo");
+                  Provider.of<AppData>(context, listen: false)
+                      .conterIndex(domo);
+                  return Container();
+                });
+        }
+      },
+    );
+  }
+
+  List<String> market = [];
+  Widget getListCat() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection('list').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return new Center(
+              child: CircularProgressIndicator(),
+            );
+          default:
+            return ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  if(enListCat.every((element) => element!=Provider.of<AppData>(context,listen: false).listAppDataCatoAr)) {
+                    enListCat.add(snapshot.data.documents[index]['entitle']);
+                    arListCat.add(snapshot.data.documents[index]['artitle']);
+                    Provider.of<AppData>(context, listen: false)
+                        .catoFirebase(arListCat, arListCat);
+                  }
+                  return Container(
+                    child: Text(''),
+                  );
+                });
+        }
+      },
+    );
+  }
+  Widget getListCatMarket() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection('diel').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return new Center(
+              child: CircularProgressIndicator(),
+            );
+          default:
+            return ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  market.add(snapshot.data.documents[index]['titleAr']);
+                  Provider.of<AppData>(context, listen: false)
+                      .marketList(market);
+                  return Container();
+                });
+        }
+      },
+    );
   }
 }

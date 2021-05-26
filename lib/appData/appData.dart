@@ -4,8 +4,9 @@ class AppData with ChangeNotifier{
   List<dynamic> listAppData=[];
   List<dynamic> listAppDataCatoAr=[];
   List<dynamic> listAppDataCatEn=[];
-  conterIndex(List list){
-    listAppData = list;
+  List<dynamic> market=[];
+  conterIndex(List domo){
+    listAppData=domo;
     notifyListeners();
   }
   // ignore: non_constant_identifier_names
@@ -14,4 +15,9 @@ class AppData with ChangeNotifier{
     listAppDataCatEn =ListEn;
     notifyListeners();
   }
+  marketList(List list){
+    market = list;
+    notifyListeners();
+  }
+
 }

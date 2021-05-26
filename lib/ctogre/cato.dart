@@ -85,18 +85,10 @@ class _CatoState extends State<Cato> {
 
   // ignore: non_constant_identifier_names
   void SavaItimInfo() {
-    setState(() {
-      _enCato.add(enTextEd.text);
-      _arCato.add(arTextEd.text);
-      EcommerceApp.sharedPreferences.setStringList('en', _enCato);
-      EcommerceApp.sharedPreferences.setStringList('ar', _arCato);
-      print(EcommerceApp.sharedPreferences.getStringList("en"));
-      print(EcommerceApp.sharedPreferences.getStringList("ar"));
-    });
     final itmeRef = Firestore.instance.collection('list');
-    itmeRef.document("i4bfCOrOshdSFcMR5QzD").updateData({
-      "artitle":EcommerceApp.sharedPreferences.getStringList("ar"),
-      "entitle":EcommerceApp.sharedPreferences.getStringList("en"),
+    itmeRef.document().setData({
+      "artitle":enTextEd.text,
+      "entitle":arTextEd.text,
     });
     Fluttertoast.showToast(msg: "تم اضافة");
     setState(() {
