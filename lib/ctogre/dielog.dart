@@ -1,19 +1,23 @@
 import 'dart:io';
+import 'package:admin_copon/edit/edit_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+
 class CustomDialog extends StatefulWidget {
   @override
   _CustomDialogState createState() => _CustomDialogState();
 }
+
 class _CustomDialogState extends State<CustomDialog> {
   File file;
   TextEditingController titleTextEd = TextEditingController();
   bool full = true;
   bool isLod = false;
+
   cupturePhotoith() async {
     File ImageFile = await ImagePicker.pickImage(
         source: ImageSource.gallery, maxHeight: 680.0, maxWidth: 970.0);
@@ -22,10 +26,20 @@ class _CustomDialogState extends State<CustomDialog> {
       full = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditCumpineName()));
+              })
+        ],
+      ),
       body: isLod
           ? Center(
               child: CircularProgressIndicator(),
@@ -93,9 +107,10 @@ class _CustomDialogState extends State<CustomDialog> {
                 });
                 upLodingImageToItim();
               },
-                  child: Container(
+              child: Container(
                 alignment: Alignment.center,
                 height: 35,
+                
                 width: 250,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
@@ -109,11 +124,14 @@ class _CustomDialogState extends State<CustomDialog> {
       ),
     );
   }
+
   upLodingImageToItim() async {
     String imageDawalosUrl = await uploadeItmimImage(file);
     SavaItimInfo(imageDawalosUrl);
   }
+
   String productId = DateTime.now().microsecondsSinceEpoch.toString();
+
   Future<String> uploadeItmimImage(myFile) async {
     final StorageReference storageReference =
         FirebaseStorage.instance.ref().child("Itmi");
@@ -123,12 +141,13 @@ class _CustomDialogState extends State<CustomDialog> {
     String dionlodeUrl = await taskSnapshot.ref.getDownloadURL();
     return dionlodeUrl;
   }
+
   SavaItimInfo(String url) {
     final itmeRef = Firestore.instance.collection('diel');
-    itmeRef.document().setData({
-      'publishedDate': DateTime.now(),
-      "titleAr" : titleTextEd.text.trim().toString(),
+    itmeRef.document(productId).setData({
+      "titleAr": titleTextEd.text.trim().toString(),
       'thumbnailUrl': url,
+      "uid": productId,
     });
     setState(() {
       Fluttertoast.showToast(msg: "تم تحديث");
@@ -139,5 +158,4 @@ class _CustomDialogState extends State<CustomDialog> {
     });
     Navigator.pop(context);
   }
-  // ignore: non_constant_identifier_names
 }

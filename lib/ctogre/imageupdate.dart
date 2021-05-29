@@ -124,6 +124,7 @@ class _UpImageLogoState extends State<UpImageLogo> {
       postImage(imageFile).then((downloadUrl) {
         imageUrls.add(downloadUrl.toString());
         if (imageUrls.length == images.length) {
+          // ignore: unused_local_variable
           String documnetID = DateTime.now().millisecondsSinceEpoch.toString();
           Firestore.instance
               .collection('imageLogo')

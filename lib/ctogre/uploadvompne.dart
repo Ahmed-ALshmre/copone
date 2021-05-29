@@ -30,6 +30,7 @@ class _UploadPageState extends State<UploadPage>
   TextEditingController _titleEnlTextEditingController =
       TextEditingController();
   String productId = DateTime.now().microsecondsSinceEpoch.toString();
+
   File file;
   List<String> listEnAr;
   String tiemNew;
@@ -161,6 +162,7 @@ class _UploadPageState extends State<UploadPage>
 
   cupturePhotoith() async {
     Navigator.pop(context);
+    // ignore: non_constant_identifier_names
     File ImageFile = await ImagePicker.pickImage(
         source: ImageSource.camera, maxHeight: 680.0, maxWidth: 970.0);
     setState(() {
@@ -297,25 +299,7 @@ class _UploadPageState extends State<UploadPage>
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: InkWell(
-              onTap: () {
-                allContInMarket(context,
-                    Provider.of<AppData>(context, listen: false).market);
-              },
-              child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(),
-                  ),
-                  child: Text(
-                    "تحديد العلامة التجارية",
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                  )),
-            ),
+            child: listGat(),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -452,6 +436,7 @@ class _UploadPageState extends State<UploadPage>
       ),
     );
   }
+
   clearFormInfo() {
     setState(() {
       file = null;
@@ -461,6 +446,7 @@ class _UploadPageState extends State<UploadPage>
       _titleEnlTextEditingController.clear();
     });
   }
+
   upLodingImageToItim(String name) async {
     setState(() {
       upLoding = true;
@@ -468,6 +454,7 @@ class _UploadPageState extends State<UploadPage>
     String imageDawalosUrl = await uploadeItmimImage(file);
     SavaItimInfo(imageDawalosUrl, name);
   }
+
   Future<String> uploadeItmimImage(myFile) async {
     final StorageReference storageReference =
         FirebaseStorage.instance.ref().child("Itmi");
@@ -490,19 +477,21 @@ class _UploadPageState extends State<UploadPage>
       'thumbnailUrl': url,
       "bool": true,
       "productUrl": urlController.text.trim().toString(),
-      "listCatoAr":
-          Provider.of<MultipleNotifier>(context, listen: false).selectedItemsAr.first,
+      "listCatoAr": Provider.of<MultipleNotifier>(context, listen: false)
+          .selectedItemsAr
+          .first,
       "listCatoEn": nameCo,
-      "selectCaont":
-          Provider.of<MultipleNotifier>(context, listen: false).selectedItems.first,
+      "selectCaont": Provider.of<MultipleNotifier>(context, listen: false)
+          .selectedItems
+          .first,
       'endE': teamController.text.toString(),
       'startS': formattedDate.toString(),
-      "market": Provider.of<AppData>(context,listen: false).market.first,
+      "market": catogSelext,
     });
     setState(() {
       file = null;
       upLoding = false;
-       productId = DateTime.now().microsecondsSinceEpoch.toString();
+      productId = DateTime.now().microsecondsSinceEpoch.toString();
       // _titleEnlTextEditingController.clear();
       // _titleArTextEditingController.clear();
       // _codeTextEditingController.clear();
@@ -532,16 +521,62 @@ class _UploadPageState extends State<UploadPage>
             return ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
+                  // ignore: unused_local_variable
                   ModelListItem modelListItem = ModelListItem.fromJson(
                       snapshot.data.documents[index].data);
-                  domo.add(snapshot.data.documents[index]['name_c']);
-                  print("ddddddddddddd$domo");
-                  Provider.of<AppData>(context, listen: false)
-                      .conterIndex(domo);
+                  if (domo.every((element) =>
+                      element != snapshot.data.documents[index]['name_c'])) {
+                    domo.add(snapshot.data.documents[index]['name_c']);
+                    print("ddddddddddddd$domo");
+                    Provider.of<AppData>(context, listen: false)
+                        .conterIndex(domo);
+                  }
                   return Container();
                 });
         }
       },
+    );
+  }
+
+  String catogSelext = "";
+  String dropdownValue = "select";
+  listGat() {
+    return Container(
+      padding: EdgeInsets.all(10),
+      height: 50,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(),
+      ),
+      child: DropdownButton<String>(
+        isExpanded: true,
+        value: dropdownValue,
+        style: TextStyle(color: Colors.deepPurple),
+        underline: Container(
+          color: Colors.deepPurpleAccent,
+        ),
+        onChanged: (String newValue) {
+          print(newValue);
+          setState(() {
+            dropdownValue = newValue;
+            print(dropdownValue);
+            catogSelext = newValue;
+          });
+        },
+        items: Provider.of<AppData>(context, listen: false)
+            .market
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                )),
+          );
+        }).toList(),
+      ),
     );
   }
 
@@ -560,11 +595,16 @@ class _UploadPageState extends State<UploadPage>
             return ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
-                  if(enListCat.every((element) => element!=Provider.of<AppData>(context,listen: false).listAppDataCatoAr)) {
-                    enListCat.add(snapshot.data.documents[index]['entitle']);
-                    arListCat.add(snapshot.data.documents[index]['artitle']);
+                  if (enListCat.every((element) =>
+                          element !=
+                          snapshot.data.documents[index]['artitle']) ||
+                      arListCat.every((element) =>
+                          element !=
+                          snapshot.data.documents[index]['entitle'])) {
+                    enListCat.add(snapshot.data.documents[index]['artitle']);
+                    arListCat.add(snapshot.data.documents[index]['entitle']);
                     Provider.of<AppData>(context, listen: false)
-                        .catoFirebase(arListCat, arListCat);
+                        .catoFirebase(arListCat, enListCat);
                   }
                   return Container(
                     child: Text(''),
@@ -574,6 +614,7 @@ class _UploadPageState extends State<UploadPage>
       },
     );
   }
+
   Widget getListCatMarket() {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection('diel').snapshots(),
@@ -588,9 +629,12 @@ class _UploadPageState extends State<UploadPage>
             return ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
-                  market.add(snapshot.data.documents[index]['titleAr']);
-                  Provider.of<AppData>(context, listen: false)
-                      .marketList(market);
+                  if (market.every((element) =>
+                      element != snapshot.data.documents[index]['titleAr'])) {
+                    market.add(snapshot.data.documents[index]['titleAr']);
+                    Provider.of<AppData>(context, listen: false)
+                        .marketList(market);
+                  }
                   return Container();
                 });
         }

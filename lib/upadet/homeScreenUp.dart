@@ -21,7 +21,7 @@ class _UpdateHomeScreenState extends State<UpdateHomeScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+ 
     super.dispose();
   _controllerAir.dispose();
   _controllerCop.dispose();
@@ -29,7 +29,7 @@ class _UpdateHomeScreenState extends State<UpdateHomeScreen> {
   }
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     _controllerCop.text = widget.code;
     _controllerAir.text=widget.textAir;

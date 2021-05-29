@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:admin_copon/utiletes/tools.dart';
+import 'package:admin_copon/edit/edit_conty.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,7 @@ class AddCountry extends StatefulWidget {
 
 class _AddCountryState extends State<AddCountry> {
   var _controller = TextEditingController();
+  // ignore: unused_field
   List<String> _list = [];
   bool _upLoding = false;
   File file;
@@ -23,14 +24,22 @@ class _AddCountryState extends State<AddCountry> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                Route route =
+                    MaterialPageRoute(builder: (context) => EditContry());
+                Navigator.push(context, route);
+              })
+        ],
         title: Text("اضافة بلد"),
       ),
-      body: _upLoding
-          ?Center(
-          child: CircularProgressIndicator()
-            ):bodyCeantr(),
+      body:
+          _upLoding ? Center(child: CircularProgressIndicator()) : bodyCeantr(),
     );
   }
+
   Widget bodyCeantr() {
     return Center(
       child: Column(
@@ -38,6 +47,7 @@ class _AddCountryState extends State<AddCountry> {
         children: [
           InkWell(
             onTap: () async {
+              // ignore: non_constant_identifier_names
               File ImageFile =
                   await ImagePicker.pickImage(source: ImageSource.gallery);
               setState(() {
@@ -83,7 +93,11 @@ class _AddCountryState extends State<AddCountry> {
           Center(
             child: InkWell(
               onTap: () {
-                upLodingImageToItim();
+                if (file == null) {
+                  Fluttertoast.showToast(msg: "لم تقم بضافة صوره");
+                } else {
+                  upLodingImageToItim();
+                }
               },
               child: Padding(
                 padding: EdgeInsets.all(8.0),
@@ -111,7 +125,6 @@ class _AddCountryState extends State<AddCountry> {
     String imageDawalosUrl = await uploadeItmimImage(file);
     SavaItimInfo(imageDawalosUrl);
   }
-
   Future<String> uploadeItmimImage(myFile) async {
     final StorageReference storageReference =
         FirebaseStorage.instance.ref().child("Itmi");
@@ -121,14 +134,15 @@ class _AddCountryState extends State<AddCountry> {
     String dionlodeUrl = await taskSnapshot.ref.getDownloadURL();
     return dionlodeUrl;
   }
+  // ignore: non_constant_identifier_names
   SavaItimInfo(String url) {
-    Firestore.instance.collection('coon').document().setData({
+    Firestore.instance.collection('coon').document(productId).setData({
       "name_c": _controller.text.trim().toString(),
       "image": url,
+      "uid": productId,
     }).then((value) {
       _controller.clear();
       Navigator.pop(context);
     });
-
   }
 }

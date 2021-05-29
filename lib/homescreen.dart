@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'ctogre/cato.dart';
 import 'ctogre/dielog.dart';
-import 'ctogre/imageupdate.dart';
+
 import 'ctogre/uploadvompne.dart';
+import 'edit_image.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   String formattedDate = "";
   List<Widget> listWidget = [
-  WebViewExample(),
+    EditIamgesAda(),
     WebViewExample(),
     UpImageFirst(),
     CustomDialog(),

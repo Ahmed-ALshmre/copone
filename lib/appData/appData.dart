@@ -4,7 +4,7 @@ class AppData with ChangeNotifier{
   List<dynamic> listAppData=[];
   List<dynamic> listAppDataCatoAr=[];
   List<dynamic> listAppDataCatEn=[];
-  List<dynamic> market=[];
+  List<String> market=[];
   conterIndex(List domo){
     listAppData=domo;
     notifyListeners();

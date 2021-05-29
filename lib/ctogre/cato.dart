@@ -1,4 +1,4 @@
-import 'package:admin_copon/utiletes/tools.dart';
+import 'package:admin_copon/edit/cato_edit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +10,22 @@ class Cato extends StatefulWidget {
 }
 
 class _CatoState extends State<Cato> {
-  List<String> _arCato = [];
-  List<String> _enCato = [];
   TextEditingController arTextEd = TextEditingController();
   TextEditingController enTextEd = TextEditingController();
-
+  String productId = DateTime.now().microsecondsSinceEpoch.toString();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>EditCato()));
+            },
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -82,16 +89,17 @@ class _CatoState extends State<Cato> {
       ),
     );
   }
-
   // ignore: non_constant_identifier_names
   void SavaItimInfo() {
     final itmeRef = Firestore.instance.collection('list');
-    itmeRef.document().setData({
+    itmeRef.document(productId).setData({
       "artitle":enTextEd.text,
       "entitle":arTextEd.text,
+      "uid":productId,
     });
     Fluttertoast.showToast(msg: "تم اضافة");
     setState(() {
+      Navigator.pop(context);
       enTextEd.clear();
       arTextEd.clear();
     });

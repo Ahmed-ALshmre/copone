@@ -8,7 +8,7 @@ allCatoEnInFirebase(BuildContext context,List list) => showDialog(
   builder: (context) {
     final _multipleNotifier = Provider.of<MultipleNotifier>(context);
     return AlertDialog(
-      title: Text("الرجاء تحديد البلد"),
+      title: Text("Select Ca...."),
       content: SingleChildScrollView(
         child: Container(
           width: double.infinity,
@@ -48,7 +48,7 @@ allCatoArInFirebase(BuildContext context,List list) => showDialog(
   builder: (context) {
     final _multipleNotifier = Provider.of<MultipleNotifier>(context);
     return AlertDialog(
-      title: Text("الرجاء تحديد البلد"),
+      title: Text("الرجاء تحديد الفىة"),
       content: SingleChildScrollView(
         child: Container(
           width: double.infinity,
@@ -57,6 +57,7 @@ allCatoArInFirebase(BuildContext context,List list) => showDialog(
             children: list
                 .map((e) => CheckboxListTile(
               title: Text(e),
+          
               onChanged: (value) {
                 value
                     ? _multipleNotifier.addItemAr(e)
