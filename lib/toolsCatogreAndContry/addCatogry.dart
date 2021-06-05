@@ -14,11 +14,19 @@ class AddCountry extends StatefulWidget {
 
 class _AddCountryState extends State<AddCountry> {
   var _controller = TextEditingController();
+  TextEditingController enController = TextEditingController();
   // ignore: unused_field
   List<String> _list = [];
   bool _upLoding = false;
   File file;
   String productId = DateTime.now().microsecondsSinceEpoch.toString();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
+    enController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +87,32 @@ class _AddCountryState extends State<AddCountry> {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all()),
               child: TextField(
+                textAlign: TextAlign.right,
                 controller: _controller,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "اضافة بلد جديد",
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: EdgeInsets.all(8),
+              height: 60,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all()),
+              child: TextField(
+                controller: enController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Add a new country",
                 ),
               ),
             ),
@@ -118,6 +148,7 @@ class _AddCountryState extends State<AddCountry> {
       ),
     );
   }
+
   upLodingImageToItim() async {
     setState(() {
       _upLoding = true;
@@ -125,6 +156,7 @@ class _AddCountryState extends State<AddCountry> {
     String imageDawalosUrl = await uploadeItmimImage(file);
     SavaItimInfo(imageDawalosUrl);
   }
+
   Future<String> uploadeItmimImage(myFile) async {
     final StorageReference storageReference =
         FirebaseStorage.instance.ref().child("Itmi");
@@ -138,6 +170,7 @@ class _AddCountryState extends State<AddCountry> {
   SavaItimInfo(String url) {
     Firestore.instance.collection('coon').document(productId).setData({
       "name_c": _controller.text.trim().toString(),
+      "name_e": enController.text.trim().toString(),
       "image": url,
       "uid": productId,
     }).then((value) {

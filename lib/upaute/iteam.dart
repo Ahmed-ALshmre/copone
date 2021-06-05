@@ -30,7 +30,7 @@ class _UpItemState extends State<UpItem> {
             );
           default:
             return ListView.builder(
-              scrollDirection: Axis.vertical,
+                scrollDirection: Axis.vertical,
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
                   ItemModel model =
@@ -39,7 +39,7 @@ class _UpItemState extends State<UpItem> {
                     padding: EdgeInsets.all(8.0),
                     child: Card(
                       child: Container(
-                        height: 150,
+                        height: 200,
                         decoration: BoxDecoration(),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,6 +79,15 @@ class _UpItemState extends State<UpItem> {
                               height: 30,
                               child: Text(
                                 "${model.title}",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                            Divider(),
+                            Container(
+                              alignment: Alignment.center,
+                              height: 30,
+                              child: Text(
+                                "${model.connn}",
                                 style: TextStyle(color: Colors.black),
                               ),
                             ),

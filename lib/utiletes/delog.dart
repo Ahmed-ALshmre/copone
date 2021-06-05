@@ -124,6 +124,52 @@ allContInFirebase(BuildContext context,List list) => showDialog(
   },
 );
 
+
+Choosethecountry(BuildContext context,List list) => showDialog(
+  context: context,
+  builder: (context) {
+    final _multipleNotifier = Provider.of<MultipleNotifier>(context);
+    return AlertDialog(
+      title: Text("الرجاء تحديد البلد"),
+      content: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: list
+                .map((e) => CheckboxListTile(
+              title: Text(e),
+              onChanged: (value) {
+                value
+                    ? _multipleNotifier.addIChoes(e)
+                    : _multipleNotifier.removeChoes(e);
+                print(Provider.of<MultipleNotifier>(context,
+                    listen: false)
+                    .selectedItems);
+              },
+              value: _multipleNotifier.isHaveItem(e),
+            ))
+                .toList(),
+          ),
+        ),
+      ),
+      actions: [
+        FlatButton(
+          child: Text("Yes"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  },
+);
+
+
+
+
+
+
 allContInMarket(BuildContext context,List list) => showDialog(
   context: context,
   builder: (context) {

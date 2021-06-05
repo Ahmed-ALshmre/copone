@@ -58,6 +58,7 @@ class _EditContryState extends State<EditContry> {
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
+                      subtitle: Text(model.contryEn),
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {

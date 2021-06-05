@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 class MultipleNotifier extends ChangeNotifier {
   List<String> _selectedItems;
   List<String> _selectedItemsMarket;
+  List<String> _coesTheContry;
   List<String> _selectedItemsAr;
   List<String> _selectedItemsEn;
-  MultipleNotifier(this._selectedItemsMarket,this._selectedItems,this._selectedItemsAr,this._selectedItemsEn);
+  MultipleNotifier(this._coesTheContry,this._selectedItemsMarket,this._selectedItems,this._selectedItemsAr,this._selectedItemsEn);
   List<String> get selectedItems => _selectedItems;
+  List<String> get coesTheContry => _coesTheContry;
   List<String> get selectedItemsMarket => _selectedItemsMarket;
   List<String> get selectedItemsAr => _selectedItemsAr;
   List<String> get selectedItemsEn => _selectedItemsEn;
   bool isHaveItem(String value) => _selectedItems.contains(value);
+   bool isHaveICis(String value) => _coesTheContry.contains(value);
   bool isHaveItemMarket(String value) => _selectedItemsMarket.contains(value);
   bool isHaveItemAr(String value) => _selectedItemsAr.contains(value);
   bool isHaveItemEn(String value) => _selectedItemsEn.contains(value);
@@ -26,6 +29,21 @@ class MultipleNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+addIChoes(String value) {
+    if (!isHaveICis(value)) {
+      _coesTheContry.add(value);
+      notifyListeners();
+    }
+  }
+  removeChoes(String value) {
+    if (isHaveICis(value)) {
+      _coesTheContry.remove(value);
+      notifyListeners();
+    }
+  }
+
   addItemAr(String value) {
     if (!isHaveItemAr(value)) {
       _selectedItemsAr.add(value);

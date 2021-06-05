@@ -95,13 +95,14 @@ class _UpdateHomeScreenState extends State<UpdateHomeScreen> {
           InkWell(
             onTap: (){
               Firestore.instance.collection('items').document(widget.id).updateData({
-                "title":_controllerEnglish.text,
-                "price":_controllerAir.text,
-                "shortInfo":_controllerCop.text,
-              });
+                "titleEn":_controllerEnglish.text,
+                "titleAr":_controllerAir.text,
+                "code":_controllerCop.text,
+              }).then((value)  {
               _controllerCop.clear();
               _controllerAir.clear();
               _controllerEnglish.clear();
+              }).catchError((e)=>print(e.toString()));
             },
             child: Container(
               alignment: Alignment.center,

@@ -505,6 +505,7 @@ class _UploadPageState extends State<UploadPage>
   }
 
   List<dynamic> domo = [];
+  List<dynamic> domo1 = [];
   List<dynamic> enListCat = [];
   List<dynamic> arListCat = [];
   Widget getListCatogre() {
@@ -525,9 +526,14 @@ class _UploadPageState extends State<UploadPage>
                   ModelListItem modelListItem = ModelListItem.fromJson(
                       snapshot.data.documents[index].data);
                   if (domo.every((element) =>
-                      element != snapshot.data.documents[index]['name_c'])) {
+                          element !=
+                          snapshot.data.documents[index]['name_c']) ||
+                      domo1.every((element) =>
+                          element !=
+                          snapshot.data.documents[index]['name_e'])) {
                     domo.add(snapshot.data.documents[index]['name_c']);
-                    print("ddddddddddddd$domo");
+                    domo.add(snapshot.data.documents[index]['name_e']);
+                    print("ddddddddddddd$domo1");
                     Provider.of<AppData>(context, listen: false)
                         .conterIndex(domo);
                   }

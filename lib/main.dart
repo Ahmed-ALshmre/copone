@@ -14,7 +14,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<MultipleNotifier>(
-          create: (_) => MultipleNotifier([], [], [], []),
+          create: (_) => MultipleNotifier([], [], [], [],[]),
         ),
         ChangeNotifierProvider<AppData>(
           create: (_) => AppData(),
